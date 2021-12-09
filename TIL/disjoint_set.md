@@ -52,7 +52,7 @@ def Find(x):
     if x == parents[x]:
         return x
     px = Find(parents[x])
-    parents[x] = p x
+    parents[x] = px
     return px
 ```
 
