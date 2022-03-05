@@ -56,9 +56,9 @@ def dijkstra():
 
         visited[min_idx] = 1
         
-        # 갱신
+        # 갱신(들러서 가는 것이 바로 가는 것보다 비용이 적다면)
         for i in range(v+1):
-            if not visited[i] and dist[i] > dist[min_idx] + adj[min_idx][i]:
+            if not visited[i] and dist[min_idx] + adj[min_idx][i] < dist[i]:
                 dist[i] = dist[min_idx] + adj[min_idx][i]
 
     return dist[v]
@@ -85,25 +85,23 @@ for tc in range(T):
 
 ```python
 def dijkstra():
-    visited = [0] * (v + 1)
-    dist = [INF] * (v + 1)
-
+    visited = [0] * (v+1)
+    dist = [INF] * (v+1)
     dist[0] = 0
 
     for _ in range(v):
-        min_dist = INF
         min_idx = -1
-        for i in range(v + 1):
-            if not visited[i] and dist[i] < min_dist:
-                min_dist = dist[i]
-                min_idx = i
+        min_value = INF
 
+        for i in range(v+1):
+            if not visited[i] and dist[i] < min_value:
+                min_idx = i
+                min_value = dist[i]
         visited[min_idx] = 1
 
         for cost, to in adj[min_idx]:
-            if min_dist + cost >= dist[to]:
-                continue
-            dist[to] = min_dist + cost
+            if min_value + cost < dist[to]:
+                dist[to] = min_value + cost
 
     return dist[v]
 
@@ -111,12 +109,12 @@ def dijkstra():
 T = int(input())
 for tc in range(T):
     v, e = map(int, input().split())
-    INF = 281317231
-    adj = [[INF] * (v + 1) for _ in range(v + 1)]
+    INF = 9886243
+    adj = [[] for _ in range(v+1)]
 
     for _ in range(e):
         n1, n2, w = map(int, input().split())
-        adj[n1].append((n2, w))
+        adj[n1].append((w, n2))
 
     print(dijkstra())
 ```
@@ -129,8 +127,8 @@ for tc in range(T):
 import heapq
 
 def dijkstra():
-    visited = [0] * (v + 1)
-    dist = [INF] * (v + 1)
+    visited = [0] * (v+1)
+    dist = [INF] * (v+1)
     dist[0] = 0
 
     hq = []
@@ -142,19 +140,17 @@ def dijkstra():
             continue
         visited[now] = 1
         for cost, to in adj[now]:
-            if now_cost + cost >= dist[to]:
-                continue
-            dist[to] = now_cost + cost
-            heapq.heappush(hq, (dist[to], to))
+            if  now_cost + cost < dist[to]:
+                dist[to] = now_cost + cost
+            	heapq.heappush(hq, (dist[to], to))
 
     return dist[v]
-
 
 T = int(input())
 for tc in range(T):
     v, e = map(int, input().split())
-    INF = 281317231
-    adj = [[] for _ in range(v + 1)]
+    INF = 97892643
+    adj = [[] for _ in range(v+1)]
 
     for _ in range(e):
         n1, n2, w = map(int, input().split())
